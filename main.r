@@ -2,9 +2,17 @@
 #Author: Lei Chen
 #Date: November 17,2020
 #Comp321 final
+#import package:dplyr, readxl, tidyselect, readr, magrittr, tidyverse
+library(dplyr)
+library(readxl)
+library(tidyr)
+library(tidyselect)
+library(tidyverse)
+library(magrittr)
+library(readr)
 #--------------------------------------
 #Import table
-myData <- read_excel("/Users/leianna/Documents/321F20/final/catsvdogs.xlsx")
+myData <- read_excel("/Users/leianna/Documents/321F20/ProgLanProj-R/catsvdogs.xlsx")
 
 #--------------------------------------
 #print list of headers
