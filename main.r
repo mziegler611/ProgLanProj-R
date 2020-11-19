@@ -10,19 +10,17 @@ library(dplyr)
 library(readxl)
 library(tidyr)
 library(tidyselect)
-library(tidyverse)
 library(magrittr)
 library(readr)
-library(testthat)
 
 #Import table
-#myData <- read_excel("/Users/leianna/Documents/321F20/final/catsvdogs.xlsx")
-myData <- read_excel("/Users/morganziegler/Desktop/ProgLanProj-R-main/catsvdogs.xlsx")
+myData <- read_excel("/Users/leianna/Documents/321F20/ProgLanProj-R/catsvdogs.xlsx")
+#myData <- read_excel("/Users/morganziegler/Desktop/ProgLanProj-R-main/catsvdogs.xlsx")
 
 options(tibble.print_max = Inf)
 options(tibble.width = Inf)
 
-#print(myData)
+print(myData)
 list_header<-names(myData)
 
 #--------------------------------------
@@ -73,16 +71,12 @@ findColumn <-function(columnInput){
 
 #--------------------------------------
 #Create function to find the min except Location
-findMin <-function(myData){
-  #Import data headers
-  list_header<-names(myData)
+findMin <-function(myData,userInputColumn){
   #find a min for a column, or find all column's min
-  userInputColumn <- readline(prompt="Enter a column name/key or all: ")
   if(toupper(userInputColumn)=="ALL"){
     #creating list to store individual mins for each column
     minList = list()
-    for(val in 2:length(list_header)){
-      #store mins to the list 
+    for(val in 2:length(names(myData))){
       minList[[val]] <- myData[findColumn(val)==min(findColumn(val)),]
     }
     #merge all mins from the list into one table
@@ -95,25 +89,20 @@ findMin <-function(myData){
 }
 
 #call the function
-
-#minTable <- findMin(myData)
+#minTable <- findMin(myData,"3")
 #print("Min Table")
 #print(minTable)
 
 
 #--------------------------------------
 #Create function to find the max except Location
-findMax <-function(myData){
-  #Import data headers
-  list_header<-names(myData)
+findMax <-function(myData,userInputColumn){
+
   #find a max for a column, or find all column's max
-  userInputColumn = readline(prompt="Enter a column name/key or all: ")
-  
   if(toupper(userInputColumn)=="ALL"){
     #creating list to store individual maxs for each column
     maxList = list()
-    for(val in 2:length(list_header)){
-      #save maxs to the list
+    for(val in 2:length(names(myData))){
       maxList[[val]] <- myData[findColumn(val)==max(findColumn(val)),]
     }
     #merge all maxs from the table into one table
@@ -126,26 +115,21 @@ findMax <-function(myData){
 }
 
 #call the function
-#maxTable <- findMax(myData)
+#maxTable <- findMax(myData,"all")
 #print("Max Table")
 #print(maxTable)
 
 #--------------------------------------
 #Find rows that user input
-findInfo <- function(){
-  userInputColumn <- readline(prompt="Enter column name/key: ")
+findInfo <- function(userInputColumn,userInputValue){
   if(toupper(userInputColumn)=="LOCATION"||as.numeric(userInputColumn)==1){
     #user input value as string
-    userInputValue <- readline(prompt="Enter value to Find: ")
-    #Find the row
     resultTable<-myData[findColumn(userInputColumn)==userInputValue,]
   }else{
     #user input value as mathmatical number
-    userInputValue <- as.numeric(readline(prompt="Enter value to Find: "))
-    
+    userInputValue <- as.numeric(userInputValue)
     resultList = list()
     for(val in 2:length(list_header)){
-      #save results to the list
       resultList[[val]] <- myData[findColumn(userInputColumn)==userInputValue,]
     }
     #merge all results from the table into one table
@@ -156,7 +140,7 @@ findInfo <- function(){
 }
 
 #Call function
-#resultTable<-findInfo()
+#resultTable<-findInfo("1","Alabama")
 #print("Result Table")
 #print(resultTable)
 
@@ -214,8 +198,8 @@ commands <- function(){
 }
 
 main <- function(){
-  myData <- read_excel("/Users/morganziegler/Desktop/ProgLanProj-R-main/catsvdogs.xlsx")
-  #myData <- read_excel("/Users/leianna/Documents/321F20/final/catsvdogs.xlsx")
+  #myData <- read_excel("/Users/morganziegler/Desktop/ProgLanProj-R-main/catsvdogs.xlsx")
+  myData <- read_excel("/Users/leianna/Documents/321F20/ProgLanProj-R/catsvdogs.xlsx")
   options(tibble.print_max = Inf)
   options(tibble.width = Inf)
   list_header<-names(myData)
@@ -223,7 +207,7 @@ main <- function(){
   commands()
   userInputValue <- readline(prompt="What would you like to do: ")
   while (userInputValue != 'n'){
-  
+    
     if (userInputValue==1){
       print(myData)
     }
@@ -231,13 +215,17 @@ main <- function(){
       printHeader(myData)
     }
     else if(userInputValue ==3){
-      print(findMin(myData))
+      userInputColumn = readline(prompt="Enter a column name/key or all: ")
+      print(findMin(myData,userInputColumn))
     }
     else if(userInputValue == 4){
-      print(findMax(myData))
+      userInputColumn = readline(prompt="Enter a column name/key or all: ")
+      print(findMax(myData,userInputColumn))
     }
     else if(userInputValue == 5){
-      print(findInfo)
+      userInputColumn <- readline(prompt="Enter column name/key: ")
+      userInputValue  <- readline(prompt="Enter value to Find: ")
+      print(findInfo(userInputColumn, userInputValue))
     }
     else if(userInputValue == 6){
       columnInput <- readline(prompt="What Column do you want to average: ")
@@ -247,13 +235,14 @@ main <- function(){
       columnInput <- readline(prompt="What Column do you want to look in: ")
       valueInput <- readline(prompt="What Value are you looking for: ")
       print(findFrequency(myData, columnInput, valueInput))
-
+      
     }
     else if (userInputValue ==8) {
-       commands()
+      commands()
     }
     userInputValue <- readline(prompt="What would you like to do (enter 'n' to quit): ")
   }
 }
 
 main()
+
