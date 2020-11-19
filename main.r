@@ -215,11 +215,11 @@ main <- function(){
       printHeader(myData)
     }
     else if(userInputValue ==3){
-      userInputColumn = readline(prompt="Enter a column name/key or all: ")
+      userInputColumn <- readline(prompt="Enter a column name/key or all: ")
       print(findMin(myData,userInputColumn))
     }
     else if(userInputValue == 4){
-      userInputColumn = readline(prompt="Enter a column name/key or all: ")
+      userInputColumn <- readline(prompt="Enter a column name/key or all: ")
       print(findMax(myData,userInputColumn))
     }
     else if(userInputValue == 5){
