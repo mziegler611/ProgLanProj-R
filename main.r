@@ -1,6 +1,10 @@
 
+#--------------------------------------
+#Author: Lei Chen, Morgan Ziegler
+#Date: November 17,2020
+#Comp321 final
+#--------------------------------------
 #install.packages("")
-
 library(readxl)
 library(tidyselect)
 library(dplyr)
@@ -10,11 +14,7 @@ library(tidyselect)
 library(tidyverse)
 library(magrittr)
 library(readr)
-#--------------------------------------
-#Author: Lei Chen
-#Date: November 17,2020
-#Comp321 final
-#--------------------------------------
+
 #Import table
 #myData <- read_excel("/Users/leianna/Documents/321F20/final/catsvdogs.xlsx")
 myData <- read_excel("/Users/morganziegler/Desktop/ProgLanProj-R-main/catsvdogs.xlsx")
@@ -104,16 +104,22 @@ findColumnByNum <-function(columnInput){
 findMin <-function(myData){
   #Import data headers
   list_header<-names(myData)
-  #creating list to store individual mins for each column
-  minList = list()
-  for(val in 2:length(list_header)){
-    #store mins to the list 
-    minList[[val]] <- myData[findColumn(list_header[val])==min(findColumn(list_header[val])),]
+  #find a min for a column, or find all column's min
+  userInputColumn <- readline(prompt="Enter a column name or all: ")
+  if(toupper(userInputColumn)=="ALL"){
+    #creating list to store individual mins for each column
+    minList = list()
+    for(val in 2:length(list_header)){
+      #store mins to the list 
+      minList[[val]] <- myData[findColumn(list_header[val])==min(findColumn(list_header[val])),]
+    }
+    #merge all mins from the list into one table
+    minTable = do.call(rbind,minList)
+    #filter out duplicate rows
+    minTable %>% distinct()
+  }else{
+    minTable<-myData[findColumn(userInputColumn)==min(findColumn(userInputColumn)),]
   }
-  #merge all mins from the list into one table
-  minTable = do.call(rbind,minList)
-  #filter out duplicate rows
-  minTable %>% distinct()
 }
 
 #call the function
@@ -122,22 +128,27 @@ print("Min Table")
 print(minTable)
 
 
-
 #--------------------------------------
 #Create function to find the max except Location
 findMax <-function(myData){
   #Import data headers
   list_header<-names(myData)
-  #creating list to store individual maxs for each column
-  maxList = list()
-  for(val in 2:length(list_header)){
-    #save maxs to the list
-    maxList[[val]] <- myData[findColumn(list_header[val])==max(findColumn(list_header[val])),]
+  #find a max for a column, or find all column's max
+  userInputColumn <- readline(prompt="Enter a column name or all: ")
+  if(toupper(userInputColumn)=="ALL"){
+    #creating list to store individual maxs for each column
+    maxList = list()
+    for(val in 2:length(list_header)){
+      #save maxs to the list
+      maxList[[val]] <- myData[findColumn(list_header[val])==max(findColumn(list_header[val])),]
+    }
+    #merge all maxs from the table into one table
+    maxTable = do.call(rbind,maxList)
+    #filter out duplicate rows
+    maxTable %>% distinct()
+  }else{
+    maxTable<-myData[findColumn(userInputColumn)==max(findColumn(userInputColumn)),]
   }
-  #merge all maxs from the table into one table
-  maxTable = do.call(rbind,maxList)
-  #filter out duplicate rows
-  maxTable %>% distinct()
 }
 
 #call the function
@@ -186,11 +197,11 @@ findAvg <-function(myData, columnInput){
     result <- findColumn(columnInput)
   }
   if ((columnInput != 1) && (toupper(columnInput) != 'LOCATION')){
-      for (val in result){
-        sum <- sum + val
-        
-      }
-      return (sum/length(result))
+    for (val in result){
+      sum <- sum + val
+      
+    }
+    return (sum/length(result))
   }
   return ('Average of Location Not possible')
   
@@ -212,12 +223,12 @@ findFrequency <-function(myData, columnInput, numToFind){
     result <- findColumn(columnInput)
   }
   
-    for (val in result){
-      if (val == numToFind){
-        frequency <- frequency + 1
-      }    
-    }
-      return (frequency)
+  for (val in result){
+    if (val == numToFind){
+      frequency <- frequency + 1
+    }    
+  }
+  return (frequency)
 }
 
 #call the function
