@@ -1,4 +1,3 @@
-
 #--------------------------------------
 #Author: Lei Chen, Morgan Ziegler
 #Date: November 17,2020
@@ -14,15 +13,16 @@ library(tidyselect)
 library(tidyverse)
 library(magrittr)
 library(readr)
+library(testthat)
 
 #Import table
-myData <- read_excel("/Users/leianna/Documents/321F20/final/catsvdogs.xlsx")
-#myData <- read_excel("/Users/morganziegler/Desktop/ProgLanProj-R-main/catsvdogs.xlsx")
+#myData <- read_excel("/Users/leianna/Documents/321F20/final/catsvdogs.xlsx")
+myData <- read_excel("/Users/morganziegler/Desktop/ProgLanProj-R-main/catsvdogs.xlsx")
 
 options(tibble.print_max = Inf)
 options(tibble.width = Inf)
 
-print(myData)
+#print(myData)
 list_header<-names(myData)
 
 #--------------------------------------
@@ -35,7 +35,7 @@ printHeader <-function(dataEnter){
 }
 
 #call the function
-printHeader(myData)
+#printHeader(myData)
 
 #--------------------------------------
 #Create a function to find columns
@@ -95,9 +95,10 @@ findMin <-function(myData){
 }
 
 #call the function
-minTable <- findMin(myData)
-print("Min Table")
-print(minTable)
+
+#minTable <- findMin(myData)
+#print("Min Table")
+#print(minTable)
 
 
 #--------------------------------------
@@ -125,9 +126,9 @@ findMax <-function(myData){
 }
 
 #call the function
-maxTable <- findMax(myData)
-print("Max Table")
-print(maxTable)
+#maxTable <- findMax(myData)
+#print("Max Table")
+#print(maxTable)
 
 #--------------------------------------
 #Find rows that user input
@@ -155,9 +156,9 @@ findInfo <- function(){
 }
 
 #Call function
-resultTable<-findInfo()
-print("Result Table")
-print(resultTable)
+#resultTable<-findInfo()
+#print("Result Table")
+#print(resultTable)
 
 #--------------------------------------
 #Create function to find the average of a column except Location
@@ -177,9 +178,9 @@ findAvg <-function(myData, columnInput){
 }
 
 #call the function
-avg <- findAvg(myData, "Percentage of households with pets")
-print("Average of Percentage of households with pets: ")
-print (avg)
+#avg <- findAvg(myData, "Percentage of households with pets")
+#print("Average of Percentage of households with pets: ")
+#print (avg)
 
 #--------------------------------------
 #Create function to find the frequency of a result in a column 
@@ -196,8 +197,63 @@ findFrequency <-function(myData, columnInput, numToFind){
 }
 
 #call the function
-print("Frequency of 59.3 in Percentage of households with pets: ")
-frq <- findFrequency(myData, 3, 59.5)
-print (frq)
+#print("Frequency of 59.3 in Percentage of households with pets: ")
+#frq <- findFrequency(myData, 3, 59.5)
+#print (frq)
 
+commands <- function(){
+  print("Functions Available:", quote = FALSE)
+  print("1. Print Data", quote = FALSE)
+  print("2. Print Headers", quote = FALSE)
+  print("3. Find Minimum", quote = FALSE)
+  print("4. Find Maximum", quote = FALSE)
+  print("5. Find Info", quote = FALSE)
+  print("6. Find Average of Column", quote = FALSE)
+  print("7. Find Frequency of A Value in Column", quote = FALSE)
+  print("8. Reprint Commands", quote = FALSE)
+}
 
+main <- function(){
+  myData <- read_excel("/Users/morganziegler/Desktop/ProgLanProj-R-main/catsvdogs.xlsx")
+  #myData <- read_excel("/Users/leianna/Documents/321F20/final/catsvdogs.xlsx")
+  options(tibble.print_max = Inf)
+  options(tibble.width = Inf)
+  list_header<-names(myData)
+  input <- 'y'
+  commands()
+  userInputValue <- readline(prompt="What would you like to do: ")
+  while (userInputValue != 'n'){
+  
+    if (userInputValue==1){
+      print(myData)
+    }
+    else if(userInputValue == 2){
+      printHeader(myData)
+    }
+    else if(userInputValue ==3){
+      print(findMin(myData))
+    }
+    else if(userInputValue == 4){
+      print(findMax(myData))
+    }
+    else if(userInputValue == 5){
+      print(findInfo)
+    }
+    else if(userInputValue == 6){
+      columnInput <- readline(prompt="What Column do you want to average: ")
+      print(findAvg(myData, columnInput))
+    }
+    else if(userInputValue == 7){
+      columnInput <- readline(prompt="What Column do you want to look in: ")
+      valueInput <- readline(prompt="What Value are you looking for: ")
+      print(findFrequency(myData, columnInput, valueInput))
+
+    }
+    else if (userInputValue ==8) {
+       commands()
+    }
+    userInputValue <- readline(prompt="What would you like to do (enter 'n' to quit): ")
+  }
+}
+
+main()
