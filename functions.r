@@ -20,7 +20,7 @@ myData <- read_excel("/Users/leianna/Documents/321F20/ProgLanProj-R/catsvdogs.xl
 options(tibble.print_max = Inf)
 options(tibble.width = Inf)
 
-print(myData)
+#print(myData)
 list_header<-names(myData)
 
 #--------------------------------------
@@ -40,29 +40,29 @@ printHeader <-function(dataEnter){
 #Used in Min, Max, Find functions
 findColumn <-function(columnInput){
   #input string or number
-  if(toupper(columnInput)==toupper(list_header[1]) || columnInput==1){
+  if(toupper(columnInput)==toupper(list_header[1]) || columnInput=="1"){
     result<-myData$Location
-  }else if(toupper(columnInput)==toupper(list_header[2]) || as.numeric(columnInput)==2){
+  }else if(toupper(columnInput)==toupper(list_header[2]) || columnInput=="2"){
     result<-myData$`Number of Households (in 1000)`
-  }else if(toupper(columnInput)==toupper(list_header[3]) || as.numeric(columnInput)==3){
+  }else if(toupper(columnInput)==toupper(list_header[3]) || columnInput=="3"){
     result<-myData$`Percentage of households with pets`
-  }else if(toupper(columnInput)==toupper(list_header[4]) || as.numeric(columnInput)==4){
+  }else if(toupper(columnInput)==toupper(list_header[4]) || columnInput=="4"){
     result<-myData$`Number of Pet Households (in 1000)`
-  }else if(toupper(columnInput)==toupper(list_header[5]) || as.numeric(columnInput)==5){
+  }else if(toupper(columnInput)==toupper(list_header[5]) || columnInput=="5"){
     result<-myData$`Percentage of Dog Owners`
-  }else if(toupper(columnInput)==toupper(list_header[6]) || as.numeric(columnInput)==6){
+  }else if(toupper(columnInput)==toupper(list_header[6]) || columnInput=="6"){
     result<-myData$`Dog Owning Households (1000s)`
-  }else if(toupper(columnInput)==toupper(list_header[7]) || as.numeric(columnInput)==7){
+  }else if(toupper(columnInput)==toupper(list_header[7]) || columnInput=="7"){
     result<-myData$`Mean Number of Dogs per household`
-  }else if(toupper(columnInput)==toupper(list_header[8]) || as.numeric(columnInput)==8){
+  }else if(toupper(columnInput)==toupper(list_header[8]) || columnInput=="8"){
     result<-myData$`Dog Population (in 1000)`
-  }else if(toupper(columnInput)==toupper(list_header[9]) || as.numeric(columnInput)==9){
+  }else if(toupper(columnInput)==toupper(list_header[9]) || columnInput=="9"){
     result<-myData$`Percentage of Cat Owners`
-  }else if(toupper(columnInput)==toupper(list_header[10]) || as.numeric(columnInput)==10){
+  }else if(toupper(columnInput)==toupper(list_header[10]) || columnInput=="10"){
     result<-myData$`Cat Owning Households`
-  }else if(toupper(columnInput)==toupper(list_header[11]) || as.numeric(columnInput)==11){
+  }else if(toupper(columnInput)==toupper(list_header[11]) || columnInput=="11"){
     result<-myData$`Mean Number of Cats`
-  }else if(toupper(columnInput)==toupper(list_header[12]) || as.numeric(columnInput)==12){
+  }else if(toupper(columnInput)==toupper(list_header[12]) || columnInput=="12"){
     result<-myData$`Cat Population`
   }
   return(result)
@@ -83,13 +83,13 @@ findMin <-function(myData,userInputColumn){
     minTable = do.call(rbind,minList)
     #filter out duplicate rows
     minTable %>% distinct()
-  }else if (as.numeric(userInputColumn) >1){
+  }else{
     minTable<-myData[findColumn(userInputColumn)==min(findColumn(userInputColumn)),]
   }
 }
 
 #call the function
-#minTable <- findMin(myData,"3")
+#minTable <- findMin(myData,"Percentage of households with pets")
 #print("Min Table")
 #print(minTable)
 
@@ -109,7 +109,7 @@ findMax <-function(myData,userInputColumn){
     maxTable = do.call(rbind,maxList)
     #filter out duplicate rows
     maxTable %>% distinct()
-  }else if (as.numeric(userInputColumn) >1){
+  }else{
     maxTable<-myData[findColumn(userInputColumn)==max(findColumn(userInputColumn)),]
   }
 }
@@ -122,12 +122,11 @@ findMax <-function(myData,userInputColumn){
 #--------------------------------------
 #Find rows that user input
 findInfo <- function(userInputColumn,userInputValue){
-  if(toupper(userInputColumn)=="LOCATION"||as.numeric(userInputColumn)==1){
+  if(toupper(userInputColumn)=="LOCATION"||userInputColumn==1){
     #user input value as string
     resultTable<-myData[findColumn(userInputColumn)==userInputValue,]
   }else{
-    #user input value as mathmatical number
-    userInputValue <- as.numeric(userInputValue)
+    #userInputValue <- as.numeric(userInputValue)
     resultList = list()
     for(val in 2:length(list_header)){
       resultList[[val]] <- myData[findColumn(userInputColumn)==userInputValue,]
@@ -140,9 +139,9 @@ findInfo <- function(userInputColumn,userInputValue){
 }
 
 #Call function
-#resultTable<-findInfo("1","Alabama")
-#print("Result Table")
-#print(resultTable)
+#resultTable<-findInfo("Dog Population (in 1000)", 507)
+# print("Result Table")
+# print(resultTable)
 
 #--------------------------------------
 #Create function to find the average of a column except Location
@@ -162,9 +161,9 @@ findAvg <-function(myData, columnInput){
 }
 
 #call the function
-#avg <- findAvg(myData, "Percentage of households with pets")
-#print("Average of Percentage of households with pets: ")
-#print (avg)
+# avg <- findAvg(myData, "Percentage of households with pets")
+# print("Average of Percentage of households with pets: ")
+# print (avg)
 
 #--------------------------------------
 #Create function to find the frequency of a result in a column 
